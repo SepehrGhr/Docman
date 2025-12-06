@@ -1,0 +1,194 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Document Manager API",
+    "description": "A service to manage documents and tags with advanced search capabilities.",
+    "contact": {
+      "name": "Sepehr Ghardashi",
+      "email": "sepehr.ghardashi@gmail.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Documents",
+      "description": "Operations related to Document Management"
+    }
+  ],
+  "paths": {
+    "/documents": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Create a new document",
+        "description": "Creates a document with tags. If tags do not exist, they are created.",
+        "operationId": "createDocument",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Document created successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input (e.g. missing title)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents/search": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Search documents",
+        "description": "Search documents by title, content, tag, or all fields.",
+        "operationId": "searchDocuments",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The search keyword",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Deep Learning"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "description": "Search mode: 'title', 'content', 'tag', or 'all'",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "all"
+            },
+            "example": "all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search completed successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DocumentResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DocumentRequestDTO": {
+        "required": [
+          "content",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the document",
+            "example": "Machine Learning Intro"
+          },
+          "content": {
+            "type": "string",
+            "description": "The main body content of the document",
+            "example": "Deep learning models such as XGBoost, SVM..."
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "List of tags associated with the document. New tags will be created automatically.",
+            "example": [
+              "AI",
+              "Machine Learning"
+            ],
+            "items": {
+              "type": "string",
+              "description": "List of tags associated with the document. New tags will be created automatically.",
+              "example": "[\"AI\",\"Machine Learning\"]"
+            }
+          }
+        },
+        "description": "Payload for creating a new document"
+      },
+      "DocumentResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the document",
+            "format": "int64",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the document",
+            "example": "Machine Learning Intro"
+          },
+          "content": {
+            "type": "string",
+            "description": "The content of the document",
+            "example": "Deep learning models such as XGBoost, SVM..."
+          },
+          "tags": {
+            "type": "array",
+            "description": "List of associated tags",
+            "example": [
+              "AI",
+              "Tech"
+            ],
+            "items": {
+              "type": "string",
+              "description": "List of associated tags",
+              "example": "[\"AI\",\"Tech\"]"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Timestamp when the document was created",
+            "format": "date-time"
+          }
+        },
+        "description": "Response object containing document details"
+      }
+    }
+  }
+}
