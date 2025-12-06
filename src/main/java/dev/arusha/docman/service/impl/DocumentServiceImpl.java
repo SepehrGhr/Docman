@@ -9,7 +9,6 @@ import dev.arusha.docman.repository.TagRepository;
 import dev.arusha.docman.repository.spec.DocumentSpecification;
 import dev.arusha.docman.service.DocumentService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
